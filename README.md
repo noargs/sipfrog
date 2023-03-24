@@ -1,0 +1,4 @@
+# Sipfrog
+
+**Cryptocurrency trading bot**
+
