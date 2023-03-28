@@ -15,8 +15,6 @@ defmodule Streamer.Binance do
 
   @stream_endpoint "wss://stream.binance.com:9443/ws/"
 
-
-
   @doc """
   - Compatible stream name consist of lowercase symbols and format as follows
   **Stream Name:** `<symbol>@trade`
@@ -38,16 +36,15 @@ defmodule Streamer.Binance do
     symbol |> url_for |> WebSockex.start_link(__MODULE__, nil)
   end
 
-
-
-  @doc"""
+  @doc """
   - Every incoming message from Binance will cause the `handle_frame/2` callback to be called
     with the message and process state
   """
-#  def handle_frame({type, msg}, state) do
-#    IO.puts "Received Message - Type: #{inspect type} -- Message: #{inspect msg}"
-#    {:ok, state}
-#  end
+
+  #  def handle_frame({type, msg}, state) do
+  #    IO.puts "Received Message - Type: #{inspect type} -- Message: #{inspect msg}"
+  #    {:ok, state}
+  #  end
 
   def handle_frame({_type, msg}, state) do
     case Jason.decode(msg) do
@@ -58,35 +55,26 @@ defmodule Streamer.Binance do
     {:ok, state}
   end
 
-
-
-  @spec url_for(String.t) :: String.t
+  @spec url_for(String.t()) :: String.t()
   defp url_for(symbol) do
     symbol = String.downcase(symbol)
     "#{@stream_endpoint}#{symbol}@trade"
   end
 
-
   defp process_event(%{"e" => "trade"} = event) do
     trade_event = %Streamer.Binance.TradeEvent{
-      :event_type          =>  event["e"],
-      :event_time          =>  event["E"],
-      :symbol              =>  event["s"],
-      :trade_id            =>  event["t"],
-      :price               =>  event["p"],
-      :quantity            =>  event["q"],
-      :buyer_order_id      =>  event["b"],
-      :seller_order_id     =>  event["a"],
-      :trade_time          =>  event["T"],
-      :buyer_market_maker  =>  event["m"]
+      :event_type => event["e"],
+      :event_time => event["E"],
+      :symbol => event["s"],
+      :trade_id => event["t"],
+      :price => event["p"],
+      :quantity => event["q"],
+      :buyer_order_id => event["b"],
+      :seller_order_id => event["a"],
+      :trade_time => event["T"],
+      :buyer_market_maker => event["m"]
     }
 
-    Logger.debug(
-      "Trade event received " <> "#{trade_event.symbol}@#{trade_event.price}"
-    )
+    Logger.debug("Trade event received " <> "#{trade_event.symbol}@#{trade_event.price}")
   end
-
-
-
-
 end

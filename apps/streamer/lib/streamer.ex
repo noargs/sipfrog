@@ -3,7 +3,6 @@ defmodule Streamer do
   Documentation for `Streamer`.
   """
 
-
   @doc """
   iex> Streamer.start_streaming("xrpusdt")
   {:ok, #PID<0.57.0>}
@@ -19,6 +18,4 @@ defmodule Streamer do
   def start_streaming(symbol) do
     Streamer.Binance.start_link(symbol)
   end
-
-
 end

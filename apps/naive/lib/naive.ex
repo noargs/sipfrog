@@ -1,6 +1,8 @@
 defmodule Naive do
   @moduledoc """
-  Documentation for `Naive`.
+  - Houses our trading strategy
+  - callback for events dependent on the state of the trader
+  - push events from the streamer app to the naive app
   """
 
   @doc """
